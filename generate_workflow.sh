@@ -3,8 +3,7 @@ wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/compo
 chmod +x pycbc_make_coinc_search_workflow pycbc_submit_dax
 
 wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/efd37637fbb568936dfb92bc7aa8a77359c9aa36/v1.3.2/x86_64/composer_xe_2015.0.090/executables.ini
-perl -pi.bak -e 's+http://code.pycbc.phy.syr.edu/pycbc-software/+https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/+g'
-executables.ini
+perl -pi.bak -e 's+http://code.pycbc.phy.syr.edu/pycbc-software/+https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/+g' executables.ini
 
 source /cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/x86_64_rhel_7/virtualenv/pycbc-v1.13.0/bin/activate
 
