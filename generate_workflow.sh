@@ -6,6 +6,8 @@ wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/efd37637fbb568936dfb92bc7a
 perl -pi.bak -e 's+http://code.pycbc.phy.syr.edu/pycbc-software/+https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/+g'
 executables.ini
 
+source /cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/x86_64_rhel_7/virtualenv/pycbc-v1.13.0/bin/activate
+
 WORKFLOW_NAME=gw150914-16day-c01-v1.3.2
 OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
 ./pycbc_make_coinc_search_workflow --workflow-name \
@@ -25,4 +27,5 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "page_ifar:decimation-factor:10000" \
       "coinc-full:loudest-keep:5000" \
       "pegasus_profile-distribute_background_bins:condor|request_memory:200000" \
-      "pegasus_profile-statmap:condor|request_memory:200000"
+      "pegasus_profile-statmap:condor|request_memory:200000" \
+      "executables:segment_query:/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/x86_64_rhel_7/virtualenv/pycbc-v1.13.0/bin/pycbc_losc_segment_query"
