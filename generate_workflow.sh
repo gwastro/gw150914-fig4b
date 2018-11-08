@@ -74,3 +74,10 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "workflow-gating:gating-pregenerated-file-l1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/L1-gating_C01_SNR300-1126051217-1129383017.txt.gz" \
       'results_page:analysis-title:"PyCBC GW150914 Search Result LOSC Data"'
 
+pushd output
+
+../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax --no-create-proxy
+
+popd
+
+exit 0
