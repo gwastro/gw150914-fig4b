@@ -6,10 +6,10 @@ WORKFLOW_NAME=gw150914-16day-c01-v1.3.2
 OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
 ./pycbc_make_coinc_search_workflow --workflow-name \
       ${WORKFLOW_NAME} --output-dir output --config-files \
-      https://code.pycbc.phy.syr.edu/ligo-cbc/pycbc-config/download/4a82467e48b811866b7cee07dd37bd147119856e/O1/pipeline/analysis.ini \
-      https://code.pycbc.phy.syr.edu/ligo-cbc/pycbc-config/download/a227ac6d4accdf5d9b4e51b93cc92543fe7e1ebc/O1/pipeline/plotting.ini \
-      https://code.pycbc.phy.syr.edu/ligo-cbc/pycbc-config/download/541d4dc77d4d0fbc1b622ed0af4ef17f02fca685/ER8/pipeline/data_C01.ini \
-      https://code.pycbc.phy.syr.edu/ligo-cbc/pycbc-config/download/541d4dc77d4d0fbc1b622ed0af4ef17f02fca685/ER8/pipeline/gps_times_ER8B_analysis_16day_C01.ini \
+      https://raw.githubusercontent.com/gwastro/pycbc-config/4a82467e48b811866b7cee07dd37bd147119856e/O1/pipeline/analysis.ini \
+      https://raw.githubusercontent.com/gwastro/pycbc-config/a227ac6d4accdf5d9b4e51b93cc92543fe7e1ebc/O1/pipeline/plotting.ini \
+      https://raw.githubusercontent.com/gwastro/pycbc-config/541d4dc77d4d0fbc1b622ed0af4ef17f02fca685/ER8/pipeline/data_C01.ini \
+      https://raw.githubusercontent.com/gwastro/pycbc-config/541d4dc77d4d0fbc1b622ed0af4ef17f02fca685/ER8/pipeline/gps_times_ER8B_analysis_16day_C01.ini \
       https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/executables.ini \
       --config-overrides \
       "results_page:output-path:${OUTPUT_PATH}" \
