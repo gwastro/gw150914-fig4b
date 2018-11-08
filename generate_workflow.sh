@@ -3,7 +3,7 @@ wget http://code.pycbc.phy.syr.edu/pycbc-software/v1.3.2/x86_64/composer_xe_2015
 chmod +x pycbc_make_coinc_search_workflow pycbc_submit_dax
 
 WORKFLOW_NAME=gw150914-16day-c01-v1.3.2
-OUTPUT_PATH=${HOME}/public_html/gw150914/${WORKFLOW_NAME}
+OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
 ./pycbc_make_coinc_search_workflow --workflow-name \
       ${WORKFLOW_NAME} --output-dir output --config-files \
       https://code.pycbc.phy.syr.edu/ligo-cbc/pycbc-config/download/4a82467e48b811866b7cee07dd37bd147119856e/O1/pipeline/analysis.ini \
