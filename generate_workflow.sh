@@ -39,4 +39,6 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "workflow-segments:segments-generate-segment-files:if_not_present" \
       "workflow-segments:segments-science-veto:1" \
       "workflow-segments:segments-final-veto-group:12H" \
-      "datafind:urltype:file"
+      "datafind:urltype:file" \
+      "workflow-tmpltbank:tmpltbank-pregenerated-bank:https://github.com/gwastro/pycbc-config/raw/41676894561059629eb5715673d7e6dea7a76865/ER8/bank/H1L1-UBERBANK_MAXM100_NS0p05_ER8HMPSD-1126033217-223200.xml.gz"
+
