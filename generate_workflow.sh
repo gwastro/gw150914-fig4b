@@ -28,4 +28,15 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "coinc-full:loudest-keep:5000" \
       "pegasus_profile-distribute_background_bins:condor|request_memory:200000" \
       "pegasus_profile-statmap:condor|request_memory:200000" \
-      "executables:segment_query:/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/x86_64_rhel_7/virtualenv/pycbc-v1.13.0/bin/pycbc_losc_segment_query"
+      "executables:segment_query:/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/x86_64_rhel_7/virtualenv/pycbc-v1.13.0/bin/pycbc_losc_segment_query" \
+      "workflow:h1-channel-name:H1:GWOSC-16KHZ_R1_STRAIN" \
+      "workflow:l1-channel-name:L1:GWOSC-16KHZ_R1_STRAIN" \
+      "workflow-datafind:datafind-h1-frame-type:H1_LOSC_16_V1" \
+      "workflow-datafind:datafind-l1-frame-type:L1_LOSC_16_V1" \
+      "workflow-segments:segments-h1-science-name:H1:RESULT:1" \
+      "workflow-segments:segments-l1-science-name:L1:RESULT:1" \
+      "workflow-segments:segments-database-url:https://losc.ligo.org/archive/O1" \
+      "workflow-segments:segments-generate-segment-files:if_not_present" \
+      "workflow-segments:segments-science-veto:1" \
+      "workflow-segments:segments-final-veto-group:12H" \
+      "datafind:urltype:file"
