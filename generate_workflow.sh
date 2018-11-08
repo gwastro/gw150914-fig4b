@@ -1,3 +1,5 @@
+#!/bin/bash -v
+
 wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_make_coinc_search_workflow
 wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_submit_dax
 chmod +x pycbc_make_coinc_search_workflow pycbc_submit_dax
