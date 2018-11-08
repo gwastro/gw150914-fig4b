@@ -1,5 +1,7 @@
 #!/bin/bash -v
 
+set -e
+
 git clean -dxf
 
 virtualenv pycbc-v1.13.0
