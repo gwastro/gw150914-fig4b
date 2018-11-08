@@ -38,6 +38,7 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "workflow-segments:segments-generate-segment-files:if_not_present" \
       "workflow-segments:segments-science-veto:1" \
       "workflow-segments:segments-final-veto-group:12H" \
+      "workflow-segments:segments-veto-definer-url:https://raw.githubusercontent.com/gwastro/1-ogc/master/workflow/auxiliary_files/H1L1-DUMMY_O1_CBC_VDEF-1126051217-1220400.xml" \
       "datafind:urltype:file" \
       "workflow-tmpltbank:tmpltbank-pregenerated-bank:https://github.com/gwastro/pycbc-config/raw/41676894561059629eb5715673d7e6dea7a76865/ER8/bank/H1L1-UBERBANK_MAXM100_NS0p05_ER8HMPSD-1126033217-223200.xml.gz" \
       "workflow-gating:gating-pregenerated-file-h1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/H1-gating_C01_SNR300-1126051217-1129383017.txt.gz" \
