@@ -42,5 +42,6 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "datafind:urltype:file" \
       "workflow-tmpltbank:tmpltbank-pregenerated-bank:https://github.com/gwastro/pycbc-config/raw/41676894561059629eb5715673d7e6dea7a76865/ER8/bank/H1L1-UBERBANK_MAXM100_NS0p05_ER8HMPSD-1126033217-223200.xml.gz" \
       "workflow-gating:gating-pregenerated-file-h1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/H1-gating_C01_SNR300-1126051217-1129383017.txt.gz" \
-      "workflow-gating:gating-pregenerated-file-l1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/L1-gating_C01_SNR300-1126051217-1129383017.txt.gz"
+      "workflow-gating:gating-pregenerated-file-l1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/L1-gating_C01_SNR300-1126051217-1129383017.txt.gz" \
+      'results_page:analysis-title:"PyCBC GW150914 Search Result LOSC Data"'
 
