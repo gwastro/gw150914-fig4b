@@ -57,8 +57,10 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "coinc-full:decimation-factor:100" \
       "page_ifar:decimation-factor:10000" \
       "coinc-full:loudest-keep:5000" \
-      "pegasus_profile-distribute_background_bins:condor|request_memory:200000" \
-      "pegasus_profile-statmap:condor|request_memory:200000" \
+      "pegasus_profile-distribute_background_bins:condor|request_memory:400000" \
+      "pegasus_profile-statmap:condor|request_memory:400000" \
+      "pegasus_profile-combine_statmap:condor|request_memory:400000" \
+      "pegasus_profile-plot_snrifar:condor|request_memory:400000" \
       "executables:segment_query:${PYCBC_1_13_0_PATH}/bin/pycbc_losc_segment_query.sh" \
       "workflow:h1-channel-name:H1:GWOSC-16KHZ_R1_STRAIN" \
       "workflow:l1-channel-name:L1:GWOSC-16KHZ_R1_STRAIN" \
