@@ -81,6 +81,9 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
 
 pushd output
 
+# Fix the paths to the output map files in the dax
+perl -pi.bak -e "s+Dpegasus.dir.storage.mapper.replica.file=([HL])+Dpegasus.dir.storage.mapper.replica.file=${PWD}/local-site-scratch/work/00/00/main_ID0000001/\$1+g" main.dax
+
 ../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax --no-create-proxy
 
 popd
