@@ -29,6 +29,56 @@ exit \$?
 EOF
 chmod +x ${PYCBC_1_13_0_PATH}/bin/pycbc_losc_segment_query.sh
 
+curl -L https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_foreground_minifollowup > pycbc_foreground_minifollowup_v1.3.2
+curl -L https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_injection_minifollowup > pycbc_injection_minifollowup_1.3.2
+curl -L https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_sngl_minifollowup > pycbc_sngl_minifollowup_1.3.2
+chmod +x pycbc_foreground_minifollowup_v1.3.2 pycbc_injection_minifollowup_1.3.2 pycbc_sngl_minifollowup_1.3.2
+
+cat > minifollowup_wrapper.sh << EOF
+#!/bin/bash
+set -e
+
+OPTS=\${@}
+
+while (( "\${#}" )) ; do
+  case "\$1" in
+    --output-map ) MAPFILE="\$2"; shift 2 ;;
+    --output-file ) DAXFILE="\$2"; shift 2 ;;
+    * ) shift;;
+  esac
+done
+
+if [[ "\${0}" == *"foreground_minifollowup"* ]]; then
+  PROGRAM=${PWD}/pycbc_foreground_minifollowup_v1.3.2
+elif [[ "\${0}" == *"injection_minifollowup"* ]]; then
+  PROGRAM=${PWD}/pycbc_injection_minifollowup_1.3.2
+elif [[ "\${0}" == *"singles_minifollowup"* ]]; then
+  PROGRAM=${PWD}/pycbc_sngl_minifollowup_1.3.2
+fi
+
+echo
+echo "====================================================================="
+echo
+echo "minifollowup running \${PROGRAM} with arguments \${OPTS}
+echo
+
+\${PROGRAM} \${OPTS}
+
+echo
+echo "====================================================================="
+echo
+echo "minifollowup fixing \${MAPFILE}
+
+perl -pi.bak -e 's+ /+ file:///+' \${MAPFILE}
+
+echo "minifollowup fixing \${DAXFILE}
+
+perl -pi.bak -e  "s+url=\"([HL])+url=\"file://\${PWD}/\\\$1+g" \${DAXFILE}
+
+exit \$?
+EOF
+chmod +x minifollowup_wrapper.sh
+
 wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_make_coinc_search_workflow
 wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_submit_dax
 chmod +x pycbc_make_coinc_search_workflow pycbc_submit_dax
@@ -61,6 +111,9 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "pegasus_profile-statmap:condor|request_memory:400000" \
       "pegasus_profile-combine_statmap:condor|request_memory:400000" \
       "pegasus_profile-plot_snrifar:condor|request_memory:400000" \
+      "executables:foreground_minifollowup:${PWD}/minifollowup_wrapper.sh" \
+      "executables:injection_minifollowup:${PWD}/minifollowup_wrapper.sh" \
+      "executables:singles_minifollowup:${PWD}/minifollowup_wrapper.sh" \
       "executables:segment_query:${PYCBC_1_13_0_PATH}/bin/pycbc_losc_segment_query.sh" \
       "workflow:h1-channel-name:H1:GWOSC-16KHZ_R1_STRAIN" \
       "workflow:l1-channel-name:L1:GWOSC-16KHZ_R1_STRAIN" \
