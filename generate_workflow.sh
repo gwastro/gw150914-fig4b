@@ -87,7 +87,7 @@ wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/efd37637fbb568936dfb92bc7a
 perl -pi.bak -e 's+http://code.pycbc.phy.syr.edu/pycbc-software/+https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/+g' executables.ini
 
 export LIGO_DATAFIND_SERVER=sugwg-condor.phy.syr.edu:80
-export LAL_DATA_PATH="/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/lalsuite-extra/e02dab8c/share/lalsimulation"
+export LAL_DATA_PATH="/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/lalsuite-extra/8/share/lalsimulation"
 
 WORKFLOW_NAME=gw150914-16day-c01-v1.3.2
 OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
