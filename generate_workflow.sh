@@ -44,6 +44,7 @@ while (( "\${#}" )) ; do
   case "\$1" in
     --output-map ) MAPFILE="\$2"; shift 2 ;;
     --output-file ) DAXFILE="\$2"; shift 2 ;;
+    --version ) echo "minifollowup_wrapper.sh running v1.3.2"; exit 0;;
     * ) shift;;
   esac
 done
@@ -54,12 +55,15 @@ elif [[ "\${0}" == *"injection_minifollowup"* ]]; then
   PROGRAM=${PWD}/pycbc_injection_minifollowup_1.3.2
 elif [[ "\${0}" == *"singles_minifollowup"* ]]; then
   PROGRAM=${PWD}/pycbc_sngl_minifollowup_1.3.2
+else
+  echo "Error: unable to determine program to use, called with \${0}"
+  exit 1
 fi
 
 echo
 echo "====================================================================="
 echo
-echo "minifollowup running \${PROGRAM} with arguments \${OPTS}
+echo "minifollowup running \${PROGRAM} with arguments \${OPTS}"
 echo
 
 \${PROGRAM} \${OPTS}
@@ -67,13 +71,16 @@ echo
 echo
 echo "====================================================================="
 echo
-echo "minifollowup fixing \${MAPFILE}
 
-perl -pi.bak -e 's+ /+ file:///+' \${MAPFILE}
+if [ ! -z "\${MAPFILE}" ] ; then
+  echo "minifollowup fixing \${MAPFILE}"
+  perl -pi.bak -e 's+ /+ file:///+' \${MAPFILE}
+fi
 
-echo "minifollowup fixing \${DAXFILE}
-
-perl -pi.bak -e  "s+url=\"([HL])+url=\"file://\${PWD}/\\\$1+g" \${DAXFILE}
+if [ ! -z "\${DAXFILE}" ] ; then
+  echo "minifollowup fixing \${DAXFILE}"
+  perl -pi.bak -e  "s+url=\"([HL])+url=\"file://\${PWD}/\\\$1+g" \${DAXFILE}
+fi
 
 exit \$?
 EOF
