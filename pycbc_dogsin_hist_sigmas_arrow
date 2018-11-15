@@ -1,0 +1,301 @@
+#!/usr/bin/env python
+""" Make table of the foreground coincident events
+"""
+import argparse, h5py, numpy, logging, sys, lal
+import matplotlib
+matplotlib.use('PS')
+import pylab
+from scipy.special import erf, erfinv
+
+def indices_within_times(times, start, end):
+    """ Return the an index array into times that give the values within the 
+    durations defined by the start and end arrays
+    
+    Parameters
+    ----------
+    times: numpy.ndarray
+        Array of times
+    start: numpy.ndarray
+        Array of duration start times
+    end: numpy.ndarray 
+        Array of duration end times
+    
+    Returns
+    -------
+    indices: numpy.ndarray
+        Array of indices into times
+    """
+    tsort = times.argsort()
+    times_sorted = times[tsort]
+    left = numpy.searchsorted(times_sorted, start)
+    right = numpy.searchsorted(times_sorted, end)
+
+    if len(left) == 0:
+        return numpy.array([], dtype=numpy.uint32)
+
+    return tsort[numpy.hstack(numpy.r_[s:e] for s, e in zip(left, right))]
+
+pylab.rc('text', usetex=True)
+pylab.rc('font', **{'family': 'sans-serif', 'sans-serif': ['Bitstream Vera Sans']})
+pylab.rcParams.update({
+    "font.size": 14,
+    "axes.titlesize": 18,
+    "axes.labelsize": 18,
+    "xtick.labelsize": 16,
+    "ytick.labelsize": 16,
+    "legend.fontsize": 14,
+    "text.latex.preamble" : [
+      r"\usepackage{arev}", 
+      r"\usepackage[T1]{fontenc}"
+      ]
+    })
+
+def sigma_from_p(p):
+    return - erfinv(1 - (1 - p) * 2) * 2**0.5
+
+def p_from_sigma(sig):
+    return 1 - (1 - erf(sig / 2**0.5)) / 2
+    
+parser = argparse.ArgumentParser()
+# General required options
+#parser.add_argument('--version', action='version', version=version.git_verbose_msg)
+parser.add_argument('--trigger-file')
+parser.add_argument('--verbose', action='count')
+parser.add_argument('--output-file')
+parser.add_argument('--bin-size', type=float, default=0.1)
+parser.add_argument('--x-min', type=float, default=8.0)
+parser.add_argument('--x-max', type=float)
+parser.add_argument('--y-min', type=float)
+parser.add_argument('--y-max', type=float)
+parser.add_argument('--trials-factor', type=int, default=1)
+parser.add_argument('--cumulative', action='store_true')
+parser.add_argument('--exclusive-bkg', action='store_true')
+parser.add_argument('--closed-box', action='store_true',
+      help="Make a closed box version that excludes foreground triggers")
+args = parser.parse_args()
+
+if args.verbose:
+    log_level = logging.INFO
+    logging.basicConfig(format='%(asctime)s : %(message)s', level=log_level)
+    
+logging.info('Read in the data')
+f = h5py.File(args.trigger_file, 'r')
+
+try:
+    fstat = f['foreground/stat'][:]
+    fstat.sort()
+except:
+    fstat = None
+
+if len(fstat) == 0:
+    fstat = None
+
+dec = f['background/decimation_factor'][:]
+bstat = f['background/stat'][:]
+fap = 1 - numpy.exp(- f.attrs['foreground_time'] / f['background/ifar'][:] / lal.YRJUL_SI)
+
+s = bstat.argsort()
+dec, bstat, fap = dec[s], bstat[s], fap[s]
+logging.info('Found %s background (inclusive zerolag) triggers' % len(bstat))
+
+# excise the triggers around the event
+e = 1126259462.42749
+window = 0.015
+
+time1 = f['background/time1'][:][s]
+time2 = f['background/time2'][:][s]
+idx = indices_within_times(time1, [e - window], [e + window])
+idx2 = indices_within_times(time2, [e - window],[e + window])
+idx = numpy.concatenate([idx, idx2])
+
+dec_exc = numpy.delete(dec, idx)
+bstat_exc = numpy.delete(bstat, idx)
+fap_exc = fap
+
+logging.info('Found %s background (exclusive zerolag) triggers' % len(bstat_exc))
+
+fig = pylab.figure()
+
+gs = matplotlib.gridspec.GridSpec(3, 1, height_ratios=[1,1,14])
+sp0 = pylab.subplot(gs[0])
+pylab.gca().axes.get_yaxis().set_visible(False)
+pylab.gca().axes.get_xaxis().set_visible(False)
+
+sp1 = pylab.subplot(gs[1], sharex=sp0)
+pylab.gca().axes.get_yaxis().set_visible(False)
+sp1ax = pylab.gca().axes.get_xaxis()
+sp1ax.set_visible(False)
+axx2 = pylab.gca().twiny()
+
+sp2 = pylab.subplot(gs[2], sharex=sp1)
+
+fig.subplots_adjust(hspace=0)
+
+if fstat is not None:
+    minimum = fstat.min()
+    maximum = max(fstat.max(), bstat.max())
+else:
+    minimum = bstat.min()
+    maximum = bstat.max()
+
+bins = numpy.arange(minimum, maximum + args.bin_size, args.bin_size)   
+
+# plot background minus foreground
+pylab.gca().semilogy()
+
+# plot full background
+if not args.closed_box:
+   if args.exclusive_bkg:
+      count, _ = numpy.histogram(bstat_exc, bins=bins, weights=dec_exc * f.attrs['foreground_time'] / f.attrs['background_time_exc'])
+      count[numpy.where(count == 0)] = f.attrs['foreground_time'] / (1000.*f.attrs['background_time'])
+      exb = sp2.step(bins[:-1], count, where='post', linewidth=2, color=pylab.cm.Purples(5.1 / 7.), label='Background excluding GW150914')
+
+   count, _ = numpy.histogram(bstat, bins=bins, weights=dec * f.attrs['foreground_time'] / f.attrs['background_time'])
+   count[numpy.where(count == 0)] = f.attrs['foreground_time'] / (1000.*f.attrs['background_time'])
+   bg = sp2.step(bins[:-1], count, where='post', linewidth=2, color='black', label='Search Background')
+
+if fstat is not None and not args.closed_box:
+    le, re = bins[:-1], bins[1:]
+    left = numpy.searchsorted(fstat, le)
+    right = numpy.searchsorted(fstat, re)
+    xpts = bins[:-1] + args.bin_size / 2.
+    count = (right - left) # / f.attrs['foreground_time']# * lal.YRJUL_SI
+    stars = (bins[:-1] > bstat.max()) & (count >= 1)
+    if stars.any():
+        staridx = numpy.where(stars)
+        starxpts = xpts[staridx]
+        starcount = count[staridx]
+        #xpts = xpts[numpy.where(~stars)]
+        #count = count[numpy.where(~stars)]
+    #pylab.scatter(xpts, count,
+    #               label='Foreground',
+    #               marker='o', edgecolors='white', lw=0.4, s=30, color='#ff6600', zorder=5)
+    fg = sp2.errorbar(xpts, count,
+                   xerr=args.bin_size/2, label='Search Result',
+                   fmt='s', mec='none', ms=8, capthick=1, barsabove=False, ecolor='w',
+                   elinewidth=1,  markerfacecolor='#ff6600', lw=1, color='w', zorder=10)
+    if stars.any():
+        #gw = sp2.scatter(starxpts, starcount,
+        #               label='GW150914',
+        #               marker='s', edgecolors='#ff6600', lw=0.3, s=10, color='#ff6600',
+        #               zorder=5)
+        #pylab.gca().annotate('GW150914', xy=(starxpts[0], starcount[0]), xytext=(21.7,1e-3),
+        #    arrowprops=dict(facecolor='black', shrink=0.07, width=1,
+        #    headwidth=8),fontsize=14)
+        pylab.gca().arrow(starxpts[0], 8e-3, 0, 0.2-8e-3, head_width=0.3, head_length=0.2, fc='k', ec='k',zorder=11)
+        pylab.gca().text(21.9,2.0e-3,'GW150914',fontsize=14)
+
+
+
+pylab.xlabel(r'Detection statistic $\hat{\rho}_c$',fontsize=18)
+pylab.ylabel('Number of events',fontsize=18)
+
+pylab.xlim(xmin=args.x_min, xmax=args.x_max)
+#pylab.ylim(ymin=f.attrs['foreground_time'] / f.attrs['background_time_exc'])
+pylab.ylim(ymin=args.y_min, ymax=args.y_max)
+gridcolor = (0.8,0.8,0.8)
+pylab.grid(b=True, which='major', color=gridcolor,linestyle='solid')
+#pylab.grid()
+handles, labels = pylab.gca().get_legend_handles_labels()
+h1 = sorted(zip(labels, handles))
+handles = [x[1] for x in h1]
+labels = [x[0] for x in h1]
+#leg = pylab.legend(handles, labels, loc='upper center', scatterpoints=1, numpoints=3)
+if args.exclusive_bkg:
+   leg = pylab.legend([handles[2],handles[1],handles[0]], [labels[2],labels[1],labels[0]], loc='upper center', scatterpoints=1, numpoints=3)
+else:
+   leg = pylab.legend([handles[2],handles[1]], [labels[2],labels[1]], loc='upper center', scatterpoints=1, numpoints=3)
+#leg = pylab.legend([bg, exb, fg, gw], ['Search Background',
+#    'Search background excluding GW150914', 'Search Result', 'GW150914'], loc='upper center', scatterpoints=1, numpoints=3)
+
+end = sigma_from_p(fap.min() * args.trials_factor)
+#end = 5
+
+def rho_from_p(p, pofrho, rhos):
+    #idx = numpy.searchsorted(pofrho[::-1], p)
+    #print p, idx, rhos[::-1][idx-2:idx+3] 
+    return rhos[::-1][numpy.searchsorted(pofrho[::-1], p)]
+
+if not args.closed_box:
+    ax1 = pylab.gca()
+    ax2 = ax1.twiny()
+    #ax2.semilogy()
+    #ax2.set_ylim(ax1.get_ylim())
+    ax1.set_zorder(ax2.get_zorder()+1) # put axis1 on top
+    ax1.set_axis_bgcolor('none')
+
+    sigmas = numpy.array([2, 3, 4, end])
+    pvals = (1. - p_from_sigma(sigmas)) / args.trials_factor
+
+    pylab.sca(ax2)
+
+    sp1.axvspan(args.x_min, rho_from_p(pvals[0], fap, bstat), color=pylab.cm.Greys(1. / 8.), zorder=-1)
+    for ii,p in enumerate(pvals[:-1]):
+        nextp = pvals[ii+1]
+        rho = rho_from_p(p, fap, bstat)
+        nextrho = rho_from_p(nextp, fap, bstat)
+        sp1.axvspan(rho, nextrho, color=pylab.cm.Greys(sigmas[ii] / 8.), zorder=-1)
+
+    # add ticks
+    tickpoints = [8.55]+rho_from_p(pvals[0:], fap, bstat).tolist()+[23.8]
+    tickpoints[3] = tickpoints[3] - 0.2
+    tickpoints[4] = tickpoints[4] + 0.4
+    ticklabels = [r' ' % sigmas[0]]
+    #ticklabels = [r'$<%i$' % sigmas[0]]
+    #ticklabels = [r'$<%i$' % sigmas[0]]
+    ticklabels.append(r'$2\sigma$')
+    for sig in sigmas[1:]:
+        if sig == end:
+            ticklabels.append(r'$%.1f\sigma$' % sig)
+        else:
+            ticklabels.append(r'$%i\sigma$' % sig)
+    ticklabels.append(r'$> %.1f\sigma$' % end)
+
+    ax2.set_xticks(tickpoints)
+    ax2.set_xticklabels(ticklabels,fontsize=14)
+    ax2.tick_params(axis='x', pad=0, size=0)
+    ax2.set_xlim(ax1.get_xlim())
+    
+    pylab.sca(axx2)
+
+    sp0.axvspan(args.x_min, rho_from_p(pvals[0], fap, bstat_exc), color=pylab.cm.Purples(1. / 7.), zorder=-1)
+    for ii,p in enumerate(pvals[:-1]):
+        nextp = pvals[ii+1]
+        rho = rho_from_p(p, fap, bstat_exc)
+        nextrho = rho_from_p(nextp, fap, bstat_exc)
+        sp0.axvspan(rho, nextrho, color=pylab.cm.Purples(sigmas[ii] / 7.), zorder=-1)
+
+    # add ticks
+    tickpoints = [8.55]+rho_from_p(pvals[0:], fap, bstat_exc).tolist()+[23.8]
+    tickpoints[2] = tickpoints[2] + 0.2
+    tickpoints[4] = tickpoints[4] + 0.1
+    ticklabels = [r' ' % sigmas[0]]
+    #ticklabels = [r'$<%i$' % sigmas[0]]
+    #ticklabels = [r'$<%i$' % sigmas[0]]
+    ticklabels.append(r'$2\sigma$')
+    for sig in sigmas[1:]:
+        if sig == end:
+            ticklabels.append(r'$%.1f\sigma$' % sig)
+            #ticklabels.append(r' ' % sig)
+        else:
+            ticklabels.append(r'$%i\sigma$' % sig)
+    ticklabels.append(r'$> %.1f\sigma$' % end)
+
+    axx2.set_xticks(tickpoints)
+    axx2.set_xticklabels(ticklabels,fontsize=14)
+    axx2.tick_params(axis='x', pad=0, size=0)
+    axx2.set_xlim(ax1.get_xlim())
+
+    pylab.sca(ax1)
+
+xticks = [8, 10, 12, 14, 16, 18, 20, 22, 24]
+ax1.set_xticks(xticks)
+ax1.set_xticklabels(['%i' % x for x in xticks])
+
+pylab.title("Binary coalescence search",y=1.15)
+pylab.savefig(args.output_file, bbox_inches='tight')
+#results.save_fig_with_metadata(fig, args.output_file,
+#     title="%s bin, Count vs Rank" % f.attrs['name'] if 'name' in f.attrs else "Count vs Rank", 
+#     caption="Histogram of the FAR vs the ranking statistic in the search.",
+#     cmd=' '.join(sys.argv))
+             
