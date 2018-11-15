@@ -111,6 +111,9 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "pegasus_profile-statmap:condor|request_memory:400000" \
       "pegasus_profile-combine_statmap:condor|request_memory:400000" \
       "pegasus_profile-plot_snrifar:condor|request_memory:400000" \
+      "pegasus_profile-plot_trigger_timeseries:condor|request_memory:16000" \
+      "pegasus_profile-page_snglinfo:condor|request_memory:16000" \
+      "pegasus_profile-plot_singles_timefreq:condor|request_memory:16000" \
       "executables:foreground_minifollowup:${PWD}/minifollowup_wrapper.sh" \
       "executables:injection_minifollowup:${PWD}/minifollowup_wrapper.sh" \
       "executables:singles_minifollowup:${PWD}/minifollowup_wrapper.sh" \
