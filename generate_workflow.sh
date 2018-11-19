@@ -133,6 +133,7 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "workflow-segments:segments-l1-science-name:L1:RESULT:1" \
       "workflow-segments:segments-database-url:https://losc.ligo.org/archive/O1" \
       "workflow-segments:segments-generate-segment-files:if_not_present" \
+      "executables:segments_from_cats:file:///bin/true" \
       "workflow-segments:segments-science-veto:1" \
       "workflow-segments:segments-final-veto-group:12H" \
       "workflow-segments:segments-veto-definer-url:https://raw.githubusercontent.com/gwastro/1-ogc/master/workflow/auxiliary_files/H1L1-DUMMY_O1_CBC_VDEF-1126051217-1220400.xml" \
