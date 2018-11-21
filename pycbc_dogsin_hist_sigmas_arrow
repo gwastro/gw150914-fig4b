@@ -222,7 +222,10 @@ if not args.closed_box:
     #ax2.semilogy()
     #ax2.set_ylim(ax1.get_ylim())
     ax1.set_zorder(ax2.get_zorder()+1) # put axis1 on top
-    ax1.set_axis_bgcolor('none')
+    if hasattr(ax1, 'set_facecolor'):
+        ax1.set_facecolor('none')
+    else:
+        ax1.set_axis_bgcolor('none')
 
     sigmas = numpy.array([2, 3, 4, end])
     pvals = (1. - p_from_sigma(sigmas)) / args.trials_factor
