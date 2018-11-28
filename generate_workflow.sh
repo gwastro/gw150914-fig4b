@@ -4,30 +4,30 @@ set -e
 
 git clean -dxf
 
-virtualenv pycbc-v1.13.0
-source pycbc-v1.13.0/bin/activate
+virtualenv pycbc-v1.13.2
+source pycbc-v1.13.2/bin/activate
 pip install --upgrade pip setuptools
-pip install -r https://raw.githubusercontent.com/gwastro/pycbc/v1.13.0/requirements.txt
-pip install 'pycbc==1.13.0'
+pip install -r https://raw.githubusercontent.com/gwastro/pycbc/v1.13.2/requirements.txt
+pip install 'pycbc==1.13.2'
 pip install 'lalsuite==6.48.1.dev20180717'
 deactivate
-export PYCBC_1_13_0_PATH=${PWD}/pycbc-v1.13.0
+export PYCBC_1_13_2_PATH=${PWD}/pycbc-v1.13.2
 
-cat > ${PYCBC_1_13_0_PATH}/bin/pycbc_losc_segment_query.sh << EOF
+cat > ${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query.sh << EOF
 #!/bin/bash
 
 unset LD_LIBRARY_PATH
 unset PYTHONPATH
 
-source ${PYCBC_1_13_0_PATH}/bin/activate
+source ${PYCBC_1_13_2_PATH}/bin/activate
 
-echo "Calling ${PYCBC_1_13_0_PATH}/bin/pycbc_losc_segment_query \${@}"
+echo "Calling ${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query \${@}"
 
-${PYCBC_1_13_0_PATH}/bin/pycbc_losc_segment_query \${@}
+${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query \${@}
 
 exit \$?
 EOF
-chmod +x ${PYCBC_1_13_0_PATH}/bin/pycbc_losc_segment_query.sh
+chmod +x ${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query.sh
 
 curl -L https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_foreground_minifollowup > pycbc_foreground_minifollowup_v1.3.2
 curl -L https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_injection_minifollowup > pycbc_injection_minifollowup_1.3.2
@@ -124,7 +124,7 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "executables:foreground_minifollowup:${PWD}/minifollowup_wrapper.sh" \
       "executables:injection_minifollowup:${PWD}/minifollowup_wrapper.sh" \
       "executables:singles_minifollowup:${PWD}/minifollowup_wrapper.sh" \
-      "executables:segment_query:${PYCBC_1_13_0_PATH}/bin/pycbc_losc_segment_query.sh" \
+      "executables:segment_query:${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query.sh" \
       "workflow:h1-channel-name:H1:GWOSC-16KHZ_R1_STRAIN" \
       "workflow:l1-channel-name:L1:GWOSC-16KHZ_R1_STRAIN" \
       "workflow-datafind:datafind-h1-frame-type:H1_LOSC_16_V1" \
