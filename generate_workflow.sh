@@ -118,6 +118,10 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "pegasus_profile-statmap:condor|request_memory:400000" \
       "pegasus_profile-combine_statmap:condor|request_memory:400000" \
       "pegasus_profile-plot_snrifar:condor|request_memory:400000" \
+      "pegasus_profile-distribute_background_bins:condor|+WantsGigantor:True" \
+      "pegasus_profile-statmap:condor|+WantsGigantor:True" \
+      "pegasus_profile-combine_statmap:condor|+WantsGigantor:True" \
+      "pegasus_profile-plot_snrifar:condor|+WantsGigantor:True" \
       "pegasus_profile-plot_trigger_timeseries:condor|request_memory:16000" \
       "pegasus_profile-page_snglinfo:condor|request_memory:16000" \
       "pegasus_profile-plot_singles_timefreq:condor|request_memory:16000" \
