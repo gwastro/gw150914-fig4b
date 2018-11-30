@@ -23,7 +23,7 @@ source ${PYCBC_1_13_2_PATH}/bin/activate
 
 echo "Calling ${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query \${@}"
 
-${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query \${@}
+${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query --protract-hw-inj 8 \${@}
 
 exit \$?
 EOF
