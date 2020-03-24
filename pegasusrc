@@ -1,2 +1,0 @@
-# disable integrity checking on files that are symlinked
-pegasus.integrity.checking nosymlink 
