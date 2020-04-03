@@ -6,7 +6,7 @@ git clean -dxf
 
 virtualenv pycbc-v1.13.2
 source pycbc-v1.13.2/bin/activate
-pip install --upgrade pip setuptools
+pip install --upgrade pip setuptools==44.1.0 
 pip install lscsoft-glue==1.60.0
 pip install -r https://raw.githubusercontent.com/gwastro/pycbc/v1.13.2/requirements.txt
 pip install 'pycbc==1.13.2'
