@@ -165,10 +165,10 @@ if [ ! -z "$INSPIRAL_ON_OSG" ]; then
 	  perl -0 -pi.bak -e "s+(<executable name=\"${inspiral}\" arch=\"x86_64\" os=\"linux\" installed=\"false\">.*?<profile namespace=\"hints\" key=\"execution.site\">)local(</profile>)+\$1osg\$2+gms" main.dax
       done
 
-      # update the gwf files to be on site osg instead of local
+      # update the gwf files to be on site osg in addition to local
       # <pfn url="file:///cvmfs/gwosc.osgstorage.org/gwdata/O1/strain.16k/frame.v1/H1/1128267776/H-H1_LOSC_16_V1-1128333312-4096.gwf" site="local"/>
-      echo "Updating site attribute of gwf files to be OSG"
-      perl -0 -pi.bak -e 's+(<pfn url="file:///cvmfs/gwosc.osgstorage.org/gwdata/O1/strain.16k/frame.v1/.*?gwf" site=")local+$1osg+gms' main.dax
+      echo "Updating site attribute of gwf files to be also on OSG"
+      perl -0 -pi.bak -e 's+(<pfn url="file:///cvmfs/gwosc.osgstorage.org/gwdata/O1/strain.16k/frame.v1/.*?gwf") (site="local"/>)+$1 $2 \n\t$1 site="osg"/>+gms' main.dax
 
       # pass additional arguments to pycbc_submit_dax
       # set bypass input file staging to true
