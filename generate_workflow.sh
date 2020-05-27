@@ -102,6 +102,13 @@ export LAL_DATA_PATH="/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/lalsuite-ex
 
 WORKFLOW_NAME=gw150914-16day-c01-v1.3.2
 OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
+ADDON_ARGS=""
+
+if [ ! -z "$INSPIRAL_ON_OSG" ]; then
+    # set profile for inspiral jobs to always run on OSG
+    ADDON_ARGS="pegasus_profile-inspiral:hints|execution.site:osg" 
+fi
+
 ./pycbc_make_coinc_search_workflow --workflow-name \
       ${WORKFLOW_NAME} --output-dir output --config-files \
       https://raw.githubusercontent.com/gwastro/pycbc-config/4a82467e48b811866b7cee07dd37bd147119856e/O1/pipeline/analysis.ini \
@@ -149,22 +156,18 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "workflow-tmpltbank:tmpltbank-pregenerated-bank:https://github.com/gwastro/pycbc-config/raw/41676894561059629eb5715673d7e6dea7a76865/ER8/bank/H1L1-UBERBANK_MAXM100_NS0p05_ER8HMPSD-1126033217-223200.xml.gz" \
       "workflow-gating:gating-pregenerated-file-h1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/H1-gating_C01_SNR300-1126051217-1129383017.txt.gz" \
       "workflow-gating:gating-pregenerated-file-l1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/L1-gating_C01_SNR300-1126051217-1129383017.txt.gz" \
-      'results_page:analysis-title:"PyCBC GW150914 Search Result LOSC Data"'
+      'results_page:analysis-title:"PyCBC GW150914 Search Result LOSC Data"' \
+      $ADDON_ARGS
 
 pushd output
 
 # Fix the paths to the output map files in the dax
 perl -pi.bak -e "s+Dpegasus.dir.storage.mapper.replica.file=([HL])+Dpegasus.dir.storage.mapper.replica.file=${PWD}/local-site-scratch/work/00/00/main_ID0000001/\$1+g" main.dax
 
+exit 1
 
-addon_args=""
+PLANNER_ARGS=""
 if [ ! -z "$INSPIRAL_ON_OSG" ]; then
-      echo "Setting up inspiral jobs to run on OSG"
-      for inspiral in inspiral-FULL_DATA-L1_ID10 inspiral-FULL_DATA-H1_ID9; do 
-	  echo $inspiral
-	  perl -0 -pi.bak -e "s+(<executable name=\"${inspiral}\" arch=\"x86_64\" os=\"linux\" installed=\"false\">.*?<profile namespace=\"hints\" key=\"execution.site\">)local(</profile>)+\$1osg\$2+gms" main.dax
-      done
-
       # update the gwf files to be on site osg in addition to local
       # <pfn url="file:///cvmfs/gwosc.osgstorage.org/gwdata/O1/strain.16k/frame.v1/H1/1128267776/H-H1_LOSC_16_V1-1128333312-4096.gwf" site="local"/>
       echo "Updating site attribute of gwf files to be also on OSG"
@@ -173,10 +176,10 @@ if [ ! -z "$INSPIRAL_ON_OSG" ]; then
       # pass additional arguments to pycbc_submit_dax
       # set bypass input file staging to true
       # execution sites both local and OSG, with staging site set for OSG to be local site
-      addon_args="-P pegasus.transfer.bypass.input.staging=true -s local,osg -S osg=local"
+      PLANNER_ARGS="-P pegasus.transfer.bypass.input.staging=true -s local,osg -S osg=local"
 fi
 
-../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax -P pegasus.integrity.checking=nosymlink  --no-create-proxy $addon_args
+../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax -P pegasus.integrity.checking=nosymlink  --no-create-proxy $PLANNER_ARGS
 
 popd
 
