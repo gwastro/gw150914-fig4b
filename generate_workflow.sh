@@ -164,8 +164,6 @@ pushd output
 # Fix the paths to the output map files in the dax
 perl -pi.bak -e "s+Dpegasus.dir.storage.mapper.replica.file=([HL])+Dpegasus.dir.storage.mapper.replica.file=${PWD}/local-site-scratch/work/00/00/main_ID0000001/\$1+g" main.dax
 
-exit 1
-
 PLANNER_ARGS=""
 if [ ! -z "$INSPIRAL_ON_OSG" ]; then
       # update the gwf files to be on site osg in addition to local
