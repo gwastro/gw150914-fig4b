@@ -176,7 +176,11 @@ if [ ! -z "$INSPIRAL_ON_OSG" ]; then
       # pass additional arguments to pycbc_submit_dax
       # set bypass input file staging to true
       # execution sites both local and OSG, with staging site set for OSG to be local site
-      PLANNER_ARGS="-P pegasus.transfer.bypass.input.staging=true -s local,osg -S osg=local"
+      PLANNER_ARGS="-P pegasus.transfer.bypass.input.staging=true -s osg -S osg=local"
+
+      # update the dax arguments for main.dax to have --staging-site osg=local
+      perl -0 -pi.bak -e 's+(<dax id="ID0000001" file="main.dax">.*?)</argument>+$1 --staging-site osg=local</argument>+gms' gw150914-16day-c01-v1.3.2.dax 
+
 fi
 
 ../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax -P pegasus.integrity.checking=nosymlink  --no-create-proxy $PLANNER_ARGS
