@@ -2,6 +2,9 @@
 
 set -e
 
+# comment if you DON'T want inspiral jobs to run on OSG
+INSPIRAL_ON_OSG=True
+
 git clean -dxf
 
 virtualenv pycbc-v1.13.2
@@ -153,7 +156,27 @@ pushd output
 # Fix the paths to the output map files in the dax
 perl -pi.bak -e "s+Dpegasus.dir.storage.mapper.replica.file=([HL])+Dpegasus.dir.storage.mapper.replica.file=${PWD}/local-site-scratch/work/00/00/main_ID0000001/\$1+g" main.dax
 
-../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax -P pegasus.integrity.checking=nosymlink  --no-create-proxy
+
+addon_args=""
+if [ ! -z "$INSPIRAL_ON_OSG" ]; then
+      echo "Setting up inspiral jobs to run on OSG"
+      for inspiral in inspiral-FULL_DATA-L1_ID10 inspiral-FULL_DATA-H1_ID9; do 
+	  echo $inspiral
+	  perl -0 -pi.bak -e "s+(<executable name=\"${inspiral}\" arch=\"x86_64\" os=\"linux\" installed=\"false\">.*?<profile namespace=\"hints\" key=\"execution.site\">)local(</profile>)+\$1osg\$2+gms" main.dax
+      done
+
+      # update the gwf files to be on site osg instead of local
+      # <pfn url="file:///cvmfs/gwosc.osgstorage.org/gwdata/O1/strain.16k/frame.v1/H1/1128267776/H-H1_LOSC_16_V1-1128333312-4096.gwf" site="local"/>
+      echo "Updating site attribute of gwf files to be OSG"
+      perl -0 -pi.bak -e 's+(<pfn url="file:///cvmfs/gwosc.osgstorage.org/gwdata/O1/strain.16k/frame.v1/.*?gwf" site=")local+$1osg+gms' main.dax
+
+      # pass additional arguments to pycbc_submit_dax
+      # set bypass input file staging to true
+      # execution sites both local and OSG, with staging site set for OSG to be local site
+      addon_args="-P pegasus.transfer.bypass.input.staging=true -s local,osg -S osg=local"
+fi
+
+../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax -P pegasus.integrity.checking=nosymlink  --no-create-proxy $addon_args
 
 popd
 
