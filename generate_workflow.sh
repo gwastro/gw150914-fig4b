@@ -125,10 +125,10 @@ fi
       "coinc-full:decimation-factor:100" \
       "page_ifar:decimation-factor:10000" \
       "coinc-full:loudest-keep:5000" \
-      "pegasus_profile-distribute_background_bins:condor|request_memory:400000" \
-      "pegasus_profile-statmap:condor|request_memory:400000" \
-      "pegasus_profile-combine_statmap:condor|request_memory:400000" \
-      "pegasus_profile-plot_snrifar:condor|request_memory:400000" \
+      "pegasus_profile-distribute_background_bins:condor|request_memory:200000" \
+      "pegasus_profile-statmap:condor|request_memory:200000" \
+      "pegasus_profile-combine_statmap:condor|request_memory:200000" \
+      "pegasus_profile-plot_snrifar:condor|request_memory:200000" \
       "pegasus_profile-distribute_background_bins:condor|+WantsGigantor:True" \
       "pegasus_profile-statmap:condor|+WantsGigantor:True" \
       "pegasus_profile-combine_statmap:condor|+WantsGigantor:True" \
