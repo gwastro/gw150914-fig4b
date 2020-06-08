@@ -10,7 +10,9 @@
     <profile namespace="condor" key="+ProjectName" >"USC_Deelman"</profile>
     <profile namespace="condor" key="+SingularityImage" >"/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-el7:latest"</profile>
     <profile namespace="condor" key="requirements" >(HAS_SINGULARITY == True  &amp;&amp; HAS_CVMFS_gwosc_osgstorage_org == True) || (isUndefined(GLIDEIN_Site) &amp;&amp; regexp("isi.edu", Machine))</profile>
-    
+
+    <!-- lal prefix on cvmfs -->
+    <profile namespace="env" key="LAL_DATA_PATH">/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/lalsuite-extra/current/share/lalsimulation</profile> 
 
     <!-- settings for memory on job retries -->
     <profile namespace="condor" key="+InitialRequestMemory">ifthenelse(isundefined(DAGNodeRetry) || DAGNodeRetry == 0, 1000, 1000*DAGNodeRetry)</profile>
