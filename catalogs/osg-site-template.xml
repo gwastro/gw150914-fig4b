@@ -8,7 +8,7 @@
 
     <!-- from Mats for OSG, run both on OSG and ISI nodes -->
     <profile namespace="condor" key="+ProjectName" >"USC_Deelman"</profile>
-    <profile namespace="condor" key="+SingularityImage" >"/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-el7:latest"</profile>
+    <profile namespace="condor" key="+SingularityImage" >"/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-el6:latest"</profile>
     <profile namespace="condor" key="requirements" >(HAS_SINGULARITY == True  &amp;&amp; HAS_CVMFS_gwosc_osgstorage_org == True) || (isUndefined(GLIDEIN_Site) &amp;&amp; regexp("isi.edu", Machine))</profile>
 
     <!-- lal prefix on cvmfs -->
