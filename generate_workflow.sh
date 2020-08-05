@@ -2,11 +2,15 @@
 
 set -e
 
+# comment if you DON'T want inspiral jobs to run on OSG
+INSPIRAL_ON_OSG=True
+
 git clean -dxf
 
 virtualenv pycbc-v1.13.2
 source pycbc-v1.13.2/bin/activate
-pip install --upgrade pip setuptools
+pip install --upgrade pip setuptools==44.1.0 
+pip install lscsoft-glue==1.60.0
 pip install -r https://raw.githubusercontent.com/gwastro/pycbc/v1.13.2/requirements.txt
 pip install 'pycbc==1.13.2'
 pip install 'lalsuite==6.48.1.dev20180717'
@@ -98,6 +102,13 @@ export LAL_DATA_PATH="/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/lalsuite-ex
 
 WORKFLOW_NAME=gw150914-16day-c01-v1.3.2
 OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
+ADDON_ARGS=""
+
+if [ ! -z "$INSPIRAL_ON_OSG" ]; then
+    # set profile for inspiral jobs to always run on OSG
+    ADDON_ARGS="pegasus_profile-inspiral:hints|execution.site:osg" 
+fi
+
 ./pycbc_make_coinc_search_workflow --workflow-name \
       ${WORKFLOW_NAME} --output-dir output --config-files \
       https://raw.githubusercontent.com/gwastro/pycbc-config/4a82467e48b811866b7cee07dd37bd147119856e/O1/pipeline/analysis.ini \
@@ -114,10 +125,10 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "coinc-full:decimation-factor:100" \
       "page_ifar:decimation-factor:10000" \
       "coinc-full:loudest-keep:5000" \
-      "pegasus_profile-distribute_background_bins:condor|request_memory:400000" \
-      "pegasus_profile-statmap:condor|request_memory:400000" \
-      "pegasus_profile-combine_statmap:condor|request_memory:400000" \
-      "pegasus_profile-plot_snrifar:condor|request_memory:400000" \
+      "pegasus_profile-distribute_background_bins:condor|request_memory:200000" \
+      "pegasus_profile-statmap:condor|request_memory:200000" \
+      "pegasus_profile-combine_statmap:condor|request_memory:200000" \
+      "pegasus_profile-plot_snrifar:condor|request_memory:200000" \
       "pegasus_profile-distribute_background_bins:condor|+WantsGigantor:True" \
       "pegasus_profile-statmap:condor|+WantsGigantor:True" \
       "pegasus_profile-combine_statmap:condor|+WantsGigantor:True" \
@@ -145,14 +156,32 @@ OUTPUT_PATH=${HOME}/secure_html/gw150914/${WORKFLOW_NAME}
       "workflow-tmpltbank:tmpltbank-pregenerated-bank:https://github.com/gwastro/pycbc-config/raw/41676894561059629eb5715673d7e6dea7a76865/ER8/bank/H1L1-UBERBANK_MAXM100_NS0p05_ER8HMPSD-1126033217-223200.xml.gz" \
       "workflow-gating:gating-pregenerated-file-h1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/H1-gating_C01_SNR300-1126051217-1129383017.txt.gz" \
       "workflow-gating:gating-pregenerated-file-l1:https://github.com/gwastro/pycbc-config/raw/1e9aee13ebf85e916136afc4a9ae57f5b2d5bc64/O1/dq/L1-gating_C01_SNR300-1126051217-1129383017.txt.gz" \
-      'results_page:analysis-title:"PyCBC GW150914 Search Result LOSC Data"'
+      'results_page:analysis-title:"PyCBC GW150914 Search Result LOSC Data"' \
+      $ADDON_ARGS
 
 pushd output
 
 # Fix the paths to the output map files in the dax
 perl -pi.bak -e "s+Dpegasus.dir.storage.mapper.replica.file=([HL])+Dpegasus.dir.storage.mapper.replica.file=${PWD}/local-site-scratch/work/00/00/main_ID0000001/\$1+g" main.dax
 
-../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax --no-create-proxy
+PLANNER_ARGS=""
+if [ ! -z "$INSPIRAL_ON_OSG" ]; then
+      # update the gwf files to be on site osg in addition to local
+      # <pfn url="file:///cvmfs/gwosc.osgstorage.org/gwdata/O1/strain.16k/frame.v1/H1/1128267776/H-H1_LOSC_16_V1-1128333312-4096.gwf" site="local"/>
+      echo "Updating site attribute of gwf files to be also on OSG"
+      perl -0 -pi.bak -e 's+(<pfn url="file:///cvmfs/gwosc.osgstorage.org/gwdata/O1/strain.16k/frame.v1/.*?gwf") (site="local"/>)+$1 $2 \n\t$1 site="osg"/>+gms' main.dax
+
+      # pass additional arguments to pycbc_submit_dax
+      # set bypass input file staging to true
+      # execution sites both local and OSG, with staging site set for OSG to be local site
+      PLANNER_ARGS="-P pegasus.transfer.bypass.input.staging=true -s osg -S osg=local"
+
+      # update the dax arguments for main.dax to have --staging-site osg=local
+      perl -0 -pi.bak -e 's+(<dax id="ID0000001" file="main.dax">.*?)</argument>+$1 --staging-site osg=local</argument>+gms' gw150914-16day-c01-v1.3.2.dax 
+
+fi
+
+../pycbc_submit_dax --force-no-accounting-group --dax gw150914-16day-c01-v1.3.2.dax -P pegasus.integrity.checking=nosymlink  --no-create-proxy $PLANNER_ARGS
 
 popd
 

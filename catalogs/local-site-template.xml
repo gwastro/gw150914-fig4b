@@ -1,0 +1,22 @@
+<site handle="local" arch="x86_64" os="LINUX">
+    <directory  path="/lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output/local-site-scratch" type="shared-scratch" free-size="null" total-size="null">
+        <file-server  operation="all" url="scp://${USER}@workflow.isi.edu/lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output/local-site-scratch">
+        </file-server>
+    </directory>
+    <directory  path="/lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output/" type="shared-storage" free-size="null" total-size="null">
+        <file-server  operation="all" url="file:///lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output">
+        </file-server>
+    </directory>
+    <profile namespace="pegasus"  key="SSH_PRIVATE_KEY">${HOME}/.ssh/workflow</profile>
+    <profile namespace="env" key="GLOBUS_LOCATION">/usr</profile>
+    <profile namespace="pegasus" key="style">condor</profile>
+    <profile namespace="condor" key="getenv">True</profile>
+    <profile namespace="condor" key="accounting_group"></profile>
+    <profile namespace="condor" key="should_transfer_files">YES</profile>
+    <profile namespace="condor" key="when_to_transfer_output">ON_EXIT_OR_EVICT</profile>
+    <profile namespace="condor" key="+DESIRED_Sites">&quot;nogrid&quot;</profile>
+    <profile namespace="condor" key="+IS_GLIDEIN">&quot;False&quot;</profile>
+    <profile namespace="condor" key="+InitialRequestMemory">ifthenelse(isundefined(DAGNodeRetry) || DAGNodeRetry == 0, 1000, 1000*DAGNodeRetry)</profile>
+    <profile namespace="condor" key="request_memory">ifthenelse( (LastHoldReasonCode=!=34 &amp;&amp; LastHoldReasonCode=!=26), InitialRequestMemory, int(1.5 * NumJobStarts * MemoryUsage) )</profile>
+    <profile namespace="condor" key="periodic_release">((HoldReasonCode =?= 34) || (HoldReasonCode =?= 26))</profile>
+

@@ -1,0 +1,63 @@
+Submit Host: workflow.isi.edu
+Github checkout from where the dax'es are generated: /lizard/users/vahi/ligo-eager-osg/gw150914-fig4b
+Workflow Submit Dir: /local-scratch/vahi/work/ligo-eager-osg/runs/pycbc-tmp.8pCrGoryjV (run0008)
+Output Dir: /lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output/ 506GB
+Scratch Dir: /lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output/local-site-scratch (264G)
+LIGO Output Size: 506 - 264 = 242GB
+pegasus-statistics summary (across all sub workflows):
+------------------------------------------------------------------------------
+Type           Succeeded Failed  Incomplete  Total     Retries   Total+Retries
+Tasks          41856     0       0           41856     28676     70532        
+Jobs           46631     0       0           46631     28676     75307        
+Sub-Workflows  8         0       0           8         104       112          
+------------------------------------------------------------------------------
+
+Workflow wall time                                       : 29 days, 0 hrs
+Cumulative job wall time                                 : 22 years, 58 days
+Cumulative job wall time as seen from submit side        : 22 years, 166 days
+Cumulative job badput wall time                          : 159 days, 10 hrs
+Cumulative job badput wall time as seen from submit side : 228 days, 1 hr
+
+# Integrity Metrics
+# Number of files for which checksums were compared/computed along with total time spent doing it. 
+94713 files checksums compared with total duration of 7 hrs, 55 mins
+46196 files checksums generated with total duration of 4 hrs, 8 mins
+
+# Integrity Errors
+# Total:    
+#       Total number of integrity errors encountered across all job executions(including retries) of a workflow. 
+# Failures: 
+#       Number of failed jobs where the last job instance had integrity errors.
+Total:    A total of 54 integrity errors encountered in the workflow
+Failures: 0 job failures had integrity errors
+
+
+Largest subworkflow (main: /local-scratch/vahi/work/ligo-eager-osg/runs/pycbc-tmp.8pCrGoryjV/work/00/00/main_ID0000001.000)
+----------------------------------------------------------------------------------------------------------------------------
+
+"wf_metrics": {
+    "compute_tasks": 41475,
+    "dax_tasks": 6,
+    "dag_tasks": 0,
+    "total_tasks": 41481,
+    "deleted_tasks": 0,
+    "dax_input_files": 1186,
+    "dax_inter_files": 41439,
+    "dax_output_files": 63,
+    "dax_total_files": 42688,
+    "compute_jobs": 41475,
+    "clustered_jobs": 0,
+    "si_tx_jobs": 28,
+    "so_tx_jobs": 4153,
+    "inter_tx_jobs": 0,
+    "reg_jobs": 0,
+    "cleanup_jobs": 0,
+    "create_dir_jobs": 1,
+    "dax_jobs": 6,
+    "dag_jobs": 0,
+    "chmod_jobs": 94,
+    "total_jobs": 45757
+  },
+  "app_metrics": {
+    "name": "ligo-pycbc"
+  }
