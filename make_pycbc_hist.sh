@@ -44,18 +44,34 @@ mkdir -p $VIRTUAL_ENV/src
 #   https://github.com/gwastro/pycbc/blob/v1.3.4/setup.py
 # and
 #   https://github.com/gwastro/pycbc/blob/v1.3.4/requirements.txt
-pip install 'numpy==1.9.3' 'unittest2==1.1.0' 'Cython==0.23.2' 'python-cjson==1.1.0' 'scipy==0.13.0' 'matplotlib==1.3.1' 'Pillow==2.9.0' 'pyRXP==2.1.0'
+pip install 'numpy==1.9.3' 'unittest2==1.1.0' 'Cython==0.23.2' 'python-cjson==1.1.0' 'scipy==0.13.0' 'matplotlib==1.5.1' 'Pillow==2.9.0' 'pyRXP==2.1.0'
 
 pushd $VIRTUAL_ENV/src
-curl https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz > hdf5-1.8.12.tar.gz
+curl -L https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz > hdf5-1.8.12.tar.gz
 tar -zxvf hdf5-1.8.12.tar.gz
 rm hdf5-1.8.12.tar.gz
 pushd hdf5-1.8.12
 ./configure --prefix=$VIRTUAL_ENV/opt/hdf5-1.8.12
-make -j $nproc install
+make -j install
 HDF5_DIR=${VIRTUAL_ENV}/opt/hdf5-1.8.12 pip $cache install 'h5py==2.5.0'
 popd
 popd
+
+# install lalsuite v6.36
+git clone https://github.com/lscsoft/lalsuite-archive.git
+pushd lalsuite-archive
+git checkout lalsuite-v6.36
+./00boot
+./configure --prefix=${VIRTUAL_ENV}/opt/lalsuite --enable-swig-python --disable-lalstochastic --disable-lalxml --disable-lalinference --disable-laldetchar
+make -j
+make install
+popd
+
+echo 'source ${VIRTUAL_ENV}/opt/lalsuite/etc/lalsuiterc' >> ${VIRTUAL_ENV}/bin/activate
+source ${VIRTUAL_ENV}/opt/lalsuite/etc/lalsuiterc
+
+# install glue and pylal
+pip install 'pycbc-glue==0.9.6' 'pycbc-pylal==0.9.5'
 
 # install v1.3.4
 reltag=v1.3.4
