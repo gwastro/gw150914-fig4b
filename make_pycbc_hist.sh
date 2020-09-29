@@ -58,6 +58,7 @@ popd
 popd
 
 # install lalsuite v6.36
+rm -rf lalsuite-archive
 git clone https://github.com/lscsoft/lalsuite-archive.git
 pushd lalsuite-archive
 git checkout lalsuite-v6.36
