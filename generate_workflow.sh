@@ -33,9 +33,9 @@ exit \$?
 EOF
 chmod +x ${PYCBC_1_13_2_PATH}/bin/pycbc_losc_segment_query.sh
 
-curl -L https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_foreground_minifollowup > pycbc_foreground_minifollowup_v1.3.2
-curl -L https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_injection_minifollowup > pycbc_injection_minifollowup_1.3.2
-curl -L https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_sngl_minifollowup > pycbc_sngl_minifollowup_1.3.2
+curl -L https://pegasus.isi.edu/ligo/eager/pycbc-software/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_foreground_minifollowup > pycbc_foreground_minifollowup_v1.3.2
+curl -L https://pegasus.isi.edu/ligo/eager/pycbc-software/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_injection_minifollowup > pycbc_injection_minifollowup_1.3.2
+curl -L https://pegasus.isi.edu/ligo/eager/pycbc-software/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_sngl_minifollowup > pycbc_sngl_minifollowup_1.3.2
 chmod +x pycbc_foreground_minifollowup_v1.3.2 pycbc_injection_minifollowup_1.3.2 pycbc_sngl_minifollowup_1.3.2
 
 cat > minifollowup_wrapper.sh << EOF
@@ -90,12 +90,12 @@ exit \$?
 EOF
 chmod +x minifollowup_wrapper.sh
 
-wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_make_coinc_search_workflow
-wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_submit_dax
+wget https://pegasus.isi.edu/ligo/eager/pycbc-software/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_make_coinc_search_workflow
+wget https://pegasus.isi.edu/ligo/eager/pycbc-software/v1.3.2/x86_64/composer_xe_2015.0.090/pycbc_submit_dax
 chmod +x pycbc_make_coinc_search_workflow pycbc_submit_dax
 
-wget https://git.ligo.org/ligo-cbc/pycbc-software/raw/efd37637fbb568936dfb92bc7aa8a77359c9aa36/v1.3.2/x86_64/composer_xe_2015.0.090/executables.ini
-perl -pi.bak -e 's+http://code.pycbc.phy.syr.edu/pycbc-software/+https://git.ligo.org/ligo-cbc/pycbc-software/raw/master/+g' executables.ini
+wget https://pegasus.isi.edu/ligo/eager/pycbc-software/v1.3.2/x86_64/composer_xe_2015.0.090/executables.ini
+perl -pi.bak -e 's+http://code.pycbc.phy.syr.edu/pycbc-software/+https://pegasus.isi.edu/ligo/eager/pycbc-software/+g' executables.ini
 
 export LIGO_DATAFIND_SERVER=sugwg-condor.phy.syr.edu:80
 export LAL_DATA_PATH="/cvmfs/oasis.opensciencegrid.org/ligo/sw/pycbc/lalsuite-extra/8/share/lalsimulation"
