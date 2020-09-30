@@ -51,13 +51,21 @@ The second script [make_pycbc_hist.sh](https://github.com/duncan-brown/gw150914-
  
 ## Replication notes
 
-Download http://mirrors.ctan.org/fonts/arev.zip and unzip
+Running the workflow requires a system with HTCondor and Pegasus WMS 4.9 installed. The compute-intensive jobs can be run on the Open Science Grid, if the HTCondor submit host is configured to allow jobs to flock to OSG. Large memory machines are needed for the post processing jobs, as described in the paper.
 
+Generation of the figures requires a LaTeX installation on the machine where `make_pycbc_hist.sh` is run (for example a [texlive](https://www.tug.org/texlive/) install). In addition, the [Arev Sans](https://ctan.org/tex-archive/fonts/arev/?lang=en) fonts need to be installed. To install these on a Linux texlive installation, download http://mirrors.ctan.org/fonts/arev.zip and unzip this file. Copy the `tex` and `fonts` directories to the appropriate place for your texlive install, e.g.
+```
 cp -R arev/tex/latex/arev /usr/share/texlive/texmf-local/texmf-compat/tex/latex
 cp -R arev/fonts /usr/share/texlive/texmf-local/texmf-compat/fonts
+```
+Run the commands
+```
 mktexlsr
 updmap-sys --force --enable Map=arev.map
 mktexlsr
-
+```
+to install the extra Arev Sans fonts. The install the `texlive-mathdesign` fonts by running the command
+```
 yum install texlive-mathdesign
-
+```
+or similar for your installation.
