@@ -1,10 +1,10 @@
 <site handle="local" arch="x86_64" os="LINUX">
-    <directory  path="/lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output/local-site-scratch" type="shared-scratch" free-size="null" total-size="null">
-        <file-server  operation="all" url="scp://${USER}@workflow.isi.edu/lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output/local-site-scratch">
+    <directory  path="${TOP_DIR}/output/local-site-scratch" type="shared-scratch" free-size="null" total-size="null">
+        <file-server  operation="all" url="scp://${USER}@${SUBMIT_HOSTNAME}/${TOP_DIR}/output/local-site-scratch">
         </file-server>
     </directory>
-    <directory  path="/lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output/" type="shared-storage" free-size="null" total-size="null">
-        <file-server  operation="all" url="file:///lizard/users/vahi/ligo-eager-osg/gw150914-fig4b/output">
+    <directory  path="${TOP_DIR}/output/" type="shared-storage" free-size="null" total-size="null">
+        <file-server  operation="all" url="file://${TOP_DIR}/gw150914-fig4b/output">
         </file-server>
     </directory>
     <profile namespace="pegasus"  key="SSH_PRIVATE_KEY">${HOME}/.ssh/workflow</profile>
