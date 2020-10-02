@@ -56,20 +56,20 @@ Sub-Workflows  8         0       0           8         104       112
 ------------------------------------------------------------------------------
 
 Workflow wall time                                       : 29 days, 0 hrs
-Cumulative job wall time                                 : 22 years, 58 days
+Cumulative job wall time                                 : 22 years, 54 days
 Cumulative job wall time as seen from submit side        : 22 years, 166 days
-Cumulative job badput wall time                          : 159 days, 10 hrs
+Cumulative job badput wall time                          : 155 days, 13 hrs
 Cumulative job badput wall time as seen from submit side : 228 days, 1 hr
 
 # Integrity Metrics
 # Number of files for which checksums were compared/computed along with total time spent doing it. 
 94713 files checksums compared with total duration of 7 hrs, 55 mins
-46196 files checksums generated with total duration of 4 hrs, 8 mins
+46200 files checksums generated with total duration of 4 hrs, 9 mins
 
 # Integrity Errors
-# Total:    
-#       Total number of integrity errors encountered across all job executions(including retries) of a workflow. 
-# Failures: 
+# Total:
+#       Total number of integrity errors encountered across all job executions(including retries) of a workflow.
+# Failures:
 #       Number of failed jobs where the last job instance had integrity errors.
 Total:    A total of 54 integrity errors encountered in the workflow
 Failures: 0 job failures had integrity errors
