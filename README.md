@@ -51,7 +51,18 @@ The second script [make_pycbc_hist.sh](https://github.com/duncan-brown/gw150914-
  
 ## Replication notes
 
+### System Setup
+
 Running the workflow requires a system with HTCondor and Pegasus WMS 4.9 installed. The compute-intensive jobs can be run on the Open Science Grid, if the HTCondor submit host is configured to allow jobs to flock to OSG. Large memory machines are needed for the post processing jobs, as described in the paper.
+
+Some other things to keep in mind
+
+1. The repository should be cloned to a shared fileysystem space on your local cluster. The directory where you clone the repository should be accessible on the nodes making up your local HTCondor Pool.
+2. The inspiral jobs are setup to run on OSG resources. For that the Pegasus workflows will be setup to transfer intermediate data and outputs to/from OSG using the SCP endpoint on your submit host.
+   * For SCP transfers, the Pegasus workflows will use the SSH key at this location ${HOME}/.ssh/workflow . We recommend you generate a new passwordless key and use it for this workflow.
+   * For the jobs to run on OSG, they need to be associated with a project. Set the environment variable OSG_PROJECT_NAME to the project (for example USC_Deelman) you are associated with.   
+
+### Latex Notes for Plots Generation
 
 Generation of the figures requires a LaTeX installation on the machine where `make_pycbc_hist.sh` is run (for example a [texlive](https://www.tug.org/texlive/) install). In addition, the [Arev Sans](https://ctan.org/tex-archive/fonts/arev/?lang=en) fonts need to be installed. To install these on a Linux texlive installation, download http://mirrors.ctan.org/fonts/arev.zip and unzip this file. Copy the `tex` and `fonts` directories to the appropriate place for your texlive install, e.g.
 ```
@@ -69,3 +80,4 @@ to install the extra Arev Sans fonts. The install the `texlive-mathdesign` fonts
 yum install texlive-mathdesign
 ```
 or similar for your installation.
+
