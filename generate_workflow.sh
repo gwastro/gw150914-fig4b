@@ -1,9 +1,28 @@
-#!/bin/bash -v
+#! /bin/bash -v
 
 set -e
 
 # comment if you DON'T want inspiral jobs to run on OSG
 INSPIRAL_ON_OSG=True
+
+# set the path to the templated pegasus site catalog file to use
+export TOP_DIR=${PWD}
+export PEGASUS_SITE_CATALOG_PATH=`pwd`/catalogs
+export SUBMIT_HOSTNAME=`hostname -f`
+
+if [ "X$SUBMIT_HOSTNAME" = "X" ]; then
+    echo "Unable to determine hostname for the submit host"
+    exit 1
+fi
+
+if [ ! -z "$INSPIRAL_ON_OSG" ]; then
+    if [ "X$OSG_PROJECT_NAME" = "X" ]; then
+	echo "Please set env variable OSG_PROJECT_NAME to the project to which your jobs will be charged to"
+	exit 1
+    fi
+    echo "The workflows will use SCP endpoint at $SUBMIT_HOSTNAME to transfer workflows intermediate data and outputs to/from OSG"
+fi
+
 
 git clean -dxf
 
