@@ -43,8 +43,8 @@ Date[YYYY-MM-DD]              Count               Runtime (sec)
 2020-06-24                    493                 167478.571          
 2020-06-30                    1                   376478.989          
 2020-07-04                    4                   23647.068           
-2020-07-05                    7                   336060.903          
-2020-07-09                    68                  50920.954           
+2020-07-05                    6                   12.903              
+2020-07-09                    69                  65143.744           
 2020-07-13                    867                 83607.696           
 2020-07-14                    16108               387795.117          
 2020-07-16                    452                 73822.813           
@@ -1617,10 +1617,11 @@ Date[YYYY-MM-DD]       Host                     Count     Runtime (sec)
 2020-06-28             mimir.isi.edu            1         376534.0            
 2020-06-30             mimir.isi.edu            1         376534.0            
 2020-07-04             shrek.isi.edu            2         23399.0             
+2020-07-05             compute-3.isi.edu        2         672096.0            
 2020-07-05             workflow.isi.edu         2         12.0                
-2020-07-09             compute-3.isi.edu        8         5433.0              
+2020-07-09             compute-3.isi.edu        13        10985.0             
+2020-07-09             mimir.isi.edu            49        51913.0             
 2020-07-09             compute-6.isi.edu        10        16784.0             
-2020-07-09             mimir.isi.edu            48        50988.0             
 2020-07-09             shrek.isi.edu            1         4435.0              
 2020-07-09             workflow.isi.edu         7         4990.0              
 2020-07-13             mimir.isi.edu            67        54818.0             
@@ -1653,7 +1654,8 @@ Date[YYYY-MM-DD]       Host                     Count     Runtime (sec)
 
 # Invocation statistics on host per day
 Date[YYYY-MM-DD]       Host                     Count     Runtime (sec)       
-2020-06-15             workflow.isi.edu         249       953.143             
+2020-06-15             corbusier.isi.edu        1         381.0               
+2020-06-15             workflow.isi.edu         248       572.143             
 2020-06-15             CRUSH-OSG-C7-10-5-185-15712        849.138             
 2020-06-15             CRUSH-OSG-C7-10-5-185-1586         29695.698           
 2020-06-15             CRUSH-OSG-C7-10-5-185-1592         8525.297            
@@ -3254,7 +3256,7 @@ Date[YYYY-MM-DD]       Host                     Count     Runtime (sec)
 2020-06-23             compute-5.isi.edu        1         0.0                 
 2020-06-23             compute-7.isi.edu        5         1.0                 
 2020-06-23             unknown                  720       1943436.991         
-2020-06-23             workflow.isi.edu         1303      26598.213           
+2020-06-23             workflow.isi.edu         1302      26392.213           
 2020-06-23             wsu109.nas.grid.wayne.edu1         0.0                 
 2020-06-23             CRUSH-OSG-C7-10-5-185-1163         0.0                 
 2020-06-23             CRUSH-OSG-C7-10-5-185-1191         0.0                 
@@ -3294,13 +3296,14 @@ Date[YYYY-MM-DD]       Host                     Count     Runtime (sec)
 2020-06-23             compute-1-5.local        6         316.312             
 2020-06-23             compute-1-6.local        10        526.277             
 2020-06-23             compute-1-9.local        10        500.012             
+2020-06-23             corbusier.isi.edu        1         206.0               
 2020-06-23             umiss124.hep.olemiss.edu 10        902.616             
 2020-06-23             wsu130.nas.grid.wayne.edu1         16073.749           
 2020-06-24             CRUSH-OSG-C7-10-5-185-1671         0.0                 
 2020-06-24             CRUSH-OSG-C7-10-5-185-1831         0.0                 
 2020-06-24             CRUSH-OSG-C7-10-5-185-1901         1.0                 
 2020-06-24             unknown                  122       89262.574           
-2020-06-24             workflow.isi.edu         315       24810.854           
+2020-06-24             workflow.isi.edu         314       24582.854           
 2020-06-24             CRUSH-OSG-C7-10-5-185-1651         0.0                 
 2020-06-24             CRUSH-OSG-C7-10-5-185-1691         0.0                 
 2020-06-24             CRUSH-OSG-C7-10-5-185-1712         0.0                 
@@ -3324,34 +3327,38 @@ Date[YYYY-MM-DD]       Host                     Count     Runtime (sec)
 2020-06-24             CRUSH-OSG-C7-10-5-185-1202         17185.121           
 2020-06-24             CRUSH-OSG-C7-10-5-185-54 1         0.0                 
 2020-06-24             compute-1-6.local        10        596.845             
+2020-06-24             corbusier.isi.edu        1         228.0               
 2020-06-24             compute-1-4.local        6         268.261             
 2020-06-30             mimir.isi.edu            1         376478.989          
+2020-07-04             corbusier.isi.edu        1         326.0               
 2020-07-04             mimir.isi.edu            1         1.0                 
 2020-07-04             shrek.isi.edu            2         23320.068           
-2020-07-04             workflow.isi.edu         1         326.0               
 2020-07-05             shrek.isi.edu            2         0.0                 
 2020-07-05             workflow.isi.edu         4         12.903              
-2020-07-09             workflow.isi.edu         11        2377.266            
-2020-07-09             compute-3.isi.edu        10        2965.555            
+2020-07-09             compute-3.isi.edu        16        6053.022            
+2020-07-09             mimir.isi.edu            30        29085.084           
+2020-07-09             corbusier.isi.edu        1         238.0               
 2020-07-09             compute-6.isi.edu        8         8953.754            
 2020-07-09             shrek.isi.edu            2         4402.618            
-2020-07-09             mimir.isi.edu            28        14860.761           
+2020-07-09             workflow.isi.edu         10        2139.266            
 2020-07-13             mimir.isi.edu            133       54389.39            
-2020-07-13             workflow.isi.edu         232       7029.438            
+2020-07-13             workflow.isi.edu         228       6401.438            
 2020-07-13             compute-1.isi.edu        54        430.046             
 2020-07-13             compute-2.isi.edu        20        260.159             
 2020-07-13             compute-3.isi.edu        16        51.818              
 2020-07-13             compute-4.isi.edu        56        462.576             
 2020-07-13             compute-5.isi.edu        54        230.028             
 2020-07-13             compute-6.isi.edu        300       20710.696           
+2020-07-13             corbusier.isi.edu        4         628.0               
 2020-07-13             shrek.isi.edu            2         43.545              
 2020-07-14             compute-1.isi.edu        642       3104.304            
 2020-07-14             compute-2.isi.edu        114       1238.542            
 2020-07-14             compute-4.isi.edu        408       5367.141            
 2020-07-14             compute-5.isi.edu        234       4638.127            
 2020-07-14             compute-6.isi.edu        3672      112687.591          
+2020-07-14             corbusier.isi.edu        95        9462.0              
 2020-07-14             mimir.isi.edu            9665      159396.512          
-2020-07-14             workflow.isi.edu         1293      100430.613          
+2020-07-14             workflow.isi.edu         1198      90968.613           
 2020-07-14             compute-3.isi.edu        68        818.322             
 2020-07-14             shrek.isi.edu            12        113.965             
 2020-07-16             compute-1.isi.edu        22        2663.617            
@@ -3360,6 +3367,7 @@ Date[YYYY-MM-DD]       Host                     Count     Runtime (sec)
 2020-07-16             compute-4.isi.edu        82        2989.846            
 2020-07-16             compute-5.isi.edu        20        3435.136            
 2020-07-16             compute-6.isi.edu        68        29900.7             
+2020-07-16             corbusier.isi.edu        8         953.0               
 2020-07-16             mimir.isi.edu            104       22431.65            
 2020-07-16             shrek.isi.edu            4         2559.894            
-2020-07-16             workflow.isi.edu         102       4591.68             
+2020-07-16             workflow.isi.edu         94        3638.68             
