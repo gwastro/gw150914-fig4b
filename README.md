@@ -49,7 +49,7 @@ The main script for reproducing the LIGO/Virgo PyCBC GW150914 analysis is [gener
    
 The second script [make_pycbc_hist.sh](https://github.com/duncan-brown/gw150914-fig4b/blob/master/make_pycbc_hist.sh) creates PyCBC environment that can be used to run the program [pycbc_dogsin_hist_sigmas_arrow](https://github.com/duncan-brown/gw150914-fig4b/blob/master/pycbc_dogsin_hist_sigmas_arrow) that makes the result plot. It should be run with no arguments in the directory where the workflow `output` directory has been created.
  
-## Replication notes
+## Reproducibility Notes
 
 ### System Setup
 
