@@ -44,7 +44,14 @@ mkdir -p $VIRTUAL_ENV/src
 #   https://github.com/gwastro/pycbc/blob/v1.3.4/setup.py
 # and
 #   https://github.com/gwastro/pycbc/blob/v1.3.4/requirements.txt
-pip install 'numpy==1.9.3' 'unittest2==1.1.0' 'Cython==0.23.2' 'python-cjson==1.1.0' 'scipy==0.13.0' 'matplotlib==1.5.1' 'Pillow==2.9.0' 'pyRXP==2.1.0'
+pip install 'numpy==1.9.3'
+pip install 'scipy==0.13.0'
+pip install 'unittest2==1.1.0'
+pip install 'Cython==0.23.2'
+pip install 'python-cjson==1.1.0' 
+pip install 'matplotlib==1.5.1' 
+pip install 'Pillow==2.9.0'
+pip install 'pyRXP==2.1.0'
 
 pushd $VIRTUAL_ENV/src
 curl -L https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz > hdf5-1.8.12.tar.gz
@@ -57,13 +64,42 @@ HDF5_DIR=${VIRTUAL_ENV}/opt/hdf5-1.8.12 pip $cache install 'h5py==2.5.0'
 popd
 popd
 
+# building lalsuite requires swig >= 2.0.11
+curl -L https://sourceforge.net/projects/swig/files/swig/swig-2.0.11/swig-2.0.11.tar.gz/download > swig-2.0.11.tar.gz
+rm -rf swig-2.0.11
+tar -zxvf swig-2.0.11.tar.gz
+pushd swig-2.0.11
+./configure --prefix=${VIRTUAL_ENV}/opt/swig-2.0.11
+make
+make install
+export PATH=${VIRTUAL_ENV}/opt/swig-2.0.11/bin:${PATH}
+popd
+
+curl -L http://software.igwn.org/lscsoft/source/metaio-8.4.0.tar.gz > metaio-8.4.0.tar.gz
+rm -rf metaio-8.4.0
+tar -zxvf metaio-8.4.0.tar.gz
+pushd metaio-8.4.0
+CPPFLAGS=-std=gnu99 ./configure --prefix=${VIRTUAL_ENV}/opt/metaio-8.4.0
+make
+make install
+popd
+
+curl -L http://software.igwn.org/lscsoft/source/libframe-8.30.tar.gz > libframe-8.30.tar.gz
+rm -rf libframe-8.30
+tar -zxvf libframe-8.30.tar.gz
+pushd libframe-8.30
+./configure --prefix=${VIRTUAL_ENV}/opt/libframe-8.30
+make
+make install
+popd
+
 # install lalsuite v6.36
 rm -rf lalsuite-archive
 git clone https://github.com/lscsoft/lalsuite-archive.git
 pushd lalsuite-archive
 git checkout lalsuite-v6.36
 ./00boot
-./configure --prefix=${VIRTUAL_ENV}/opt/lalsuite --enable-swig-python --disable-lalstochastic --disable-lalxml --disable-lalinference --disable-laldetchar
+LDFLAGS="-L${VIRTUAL_ENV}/opt/metaio-8.4.0/lib -L${VIRTUAL_ENV}/opt/libframe-8.30/lib" CPPFLAGS="-I${VIRTUAL_ENV}/opt/metaio-8.4.0/include -I${VIRTUAL_ENV}/opt/libframe-8.30/include" ./configure --prefix=${VIRTUAL_ENV}/opt/lalsuite --enable-swig-python --disable-lalstochastic --disable-lalxml --disable-lalinference --disable-laldetchar
 make -j
 make install
 popd
