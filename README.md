@@ -23,8 +23,6 @@ In February 2016, LIGO announced the first observation of gravitational waves fr
 
 ## Data Products
 
-The material in this repository accompanies the paper [link](link).
-
 The main script for reproducing the LIGO/Virgo PyCBC GW150914 analysis is [generate_workflow.sh](https://github.com/duncan-brown/gw150914-fig4b/blob/master/generate_workflow.sh). This script performs the following actions:
 
  1. Install a version of PyCBC that contains the tools needed to obtain data from the Gravitational Wave Open Science Center (GWOSC).
