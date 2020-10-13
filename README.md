@@ -49,6 +49,12 @@ The second script [make_pycbc_hist.sh](https://github.com/duncan-brown/gw150914-
  
 ## Reproducibility Notes
 
+### Datafind Server
+
+The PyCBC workflow queries a LIGO Datafind Server to map metdata queries (time ranges and data types) into file locations. Running the workflow generation script requires the environment variable `LIGO_DATAFIND_SERVER` to be set to a server that indexes the GWOSC data. The script currently queries a public server at Syracuse University that indexes the GWOSC data from the LIGO/Virgo O1 and O2 runs in CVMFS. This server can be used to run the workflow on e.g. the OSG and access the GWOSC data via CVMFS.
+
+For users who wish to store data in a different location, or maintain their own datafind server we provide [RPMs](https://github.com/duncan-brown/gw150914-fig4b/blob/master/rpms) for installation of the LDAS Diskcache API (thai indexes the data) and the LIGO Datafind Server (that responds to metadata queries from the workflow) on a CentOS 7 machine. We also provide an LDAS Diskcacge API configuration file [diskcache.rsc](https://github.com/duncan-brown/gw150914-fig4b/blob/master/diskcache.rsc) and a Datafind server configuration file [datafind-server.ini](https://github.com/duncan-brown/gw150914-fig4b/blob/master/datafind-server.ini) that can be used to index the GWOSC data in CVMFS.
+
 ### System Setup
 
 Running the workflow requires a system with HTCondor and Pegasus WMS 4.9 installed. The compute-intensive jobs can be run on the Open Science Grid, if the HTCondor submit host is configured to allow jobs to flock to OSG. Large memory machines are needed for the post processing jobs, as described in the paper.
