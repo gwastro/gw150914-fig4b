@@ -49,6 +49,8 @@ The second script [make_pycbc_hist.sh](https://github.com/duncan-brown/gw150914-
  
 ## Reproducibility Notes
 
+Note that the Python scripts used to reproduce the workflow (in addition to the LIGO Python scripts used) require Python 2.7 and are not compatible with Python 3.
+
 ### Datafind Server
 
 The PyCBC workflow queries a LIGO Datafind Server to map metdata queries (time ranges and data types) into file locations. Running the workflow generation script requires the environment variable `LIGO_DATAFIND_SERVER` to be set to a server that indexes the GWOSC data. The script currently queries a public server at Syracuse University that indexes the GWOSC data from the LIGO/Virgo O1 and O2 runs in CVMFS. This server can be used to run the workflow on e.g. the OSG and access the GWOSC data via CVMFS.
